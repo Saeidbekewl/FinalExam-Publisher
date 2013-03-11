@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ShopModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="ShopEntitie" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Companies" EntityType="ShopModel.Company" />
+    <EntitySet Name="Customers" EntityType="ShopModel.Customer" />
+    <EntitySet Name="Invoices" EntityType="ShopModel.Invoice" />
+    <EntitySet Name="InvoiceItems" EntityType="ShopModel.InvoiceItem" />
+    <EntitySet Name="Payments" EntityType="ShopModel.Payment" />
+    <EntitySet Name="PayTypes" EntityType="ShopModel.PayType" />
+    <EntitySet Name="Prices" EntityType="ShopModel.Price" />
+    <EntitySet Name="Products" EntityType="ShopModel.Product" />
+    <AssociationSet Name="FK__Product__Company__1920BF5C" Association="ShopModel.FK__Product__Company__1920BF5C">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Invoice__Custome__20C1E124" Association="ShopModel.FK__Invoice__Custome__20C1E124">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Invoice" EntitySet="Invoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Payment__Custome__24927208" Association="ShopModel.FK__Payment__Custome__24927208">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Payment" EntitySet="Payments" />
+    </AssociationSet>
+    <AssociationSet Name="FK__InvoiceIt__Invoi__29572725" Association="ShopModel.FK__InvoiceIt__Invoi__29572725">
+      <End Role="Invoice" EntitySet="Invoices" />
+      <End Role="InvoiceItem" EntitySet="InvoiceItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__InvoiceIt__Produ__2A4B4B5E" Association="ShopModel.FK__InvoiceIt__Produ__2A4B4B5E">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="InvoiceItem" EntitySet="InvoiceItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Payment__PayType__25869641" Association="ShopModel.FK__Payment__PayType__25869641">
+      <End Role="PayType" EntitySet="PayTypes" />
+      <End Role="Payment" EntitySet="Payments" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Price__ProductID__37A5467C" Association="ShopModel.FK__Price__ProductID__37A5467C">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Price" EntitySet="Prices" />
+    </AssociationSet>
+    <EntitySet Name="ProductViews" EntityType="ShopModel.ProductView" />
+    <FunctionImport Name="InsertProduct" ReturnType="Collection(Decimal)">
+      <Parameter Name="CompanyID" Mode="In" Type="Int64" />
+      <Parameter Name="Code" Mode="In" Type="String" />
+      <Parameter Name="Title" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateProduct">
+      <Parameter Name="ID" Mode="In" Type="Int64" />
+      <Parameter Name="CompnayID" Mode="In" Type="Int64" />
+      <Parameter Name="Code" Mode="In" Type="String" />
+      <Parameter Name="Title" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="DeleteProduct">
+      <Parameter Name="ID" Mode="In" Type="Int64" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="Address" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Products" Relationship="ShopModel.FK__Product__Company__1920BF5C" FromRole="Company" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="70" Unicode="true" FixedLength="false" />
+    <Property Name="FullName" Type="String" Nullable="false" MaxLength="121" Unicode="true" FixedLength="false" p1:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="Invoices" Relationship="ShopModel.FK__Invoice__Custome__20C1E124" FromRole="Customer" ToRole="Invoice" />
+    <NavigationProperty Name="Payments" Relationship="ShopModel.FK__Payment__Custome__24927208" FromRole="Customer" ToRole="Payment" />
+  </EntityType>
+  <EntityType Name="Invoice" Abstract="false">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerID" Type="Int64" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Customer" Relationship="ShopModel.FK__Invoice__Custome__20C1E124" FromRole="Invoice" ToRole="Customer" />
+    <NavigationProperty Name="InvoiceItems" Relationship="ShopModel.FK__InvoiceIt__Invoi__29572725" FromRole="Invoice" ToRole="InvoiceItem" />
+  </EntityType>
+  <EntityType Name="InvoiceItem">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="InvoiceID" Type="Int64" Nullable="false" />
+    <Property Name="ProductID" Type="Int64" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Invoice" Relationship="ShopModel.FK__InvoiceIt__Invoi__29572725" FromRole="InvoiceItem" ToRole="Invoice" />
+    <NavigationProperty Name="Product" Relationship="ShopModel.FK__InvoiceIt__Produ__2A4B4B5E" FromRole="InvoiceItem" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Payment" Abstract="false">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="CustomerID" Type="Int64" Nullable="false" />
+    <Property Name="PayTypeID" Type="Int64" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Value" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Customer" Relationship="ShopModel.FK__Payment__Custome__24927208" FromRole="Payment" ToRole="Customer" />
+    <NavigationProperty Name="PayType" Relationship="ShopModel.FK__Payment__PayType__25869641" FromRole="Payment" ToRole="PayType" />
+  </EntityType>
+  <EntityType Name="PayType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Payments" Relationship="ShopModel.FK__Payment__PayType__25869641" FromRole="PayType" ToRole="Payment" />
+  </EntityType>
+  <EntityType Name="Price">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductID" Type="Int64" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Buy" Type="Int32" Nullable="false" />
+    <Property Name="Sell" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="ShopModel.FK__Price__ProductID__37A5467C" FromRole="Price" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyID" Type="Int64" Nullable="false" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="true" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Company" Relationship="ShopModel.FK__Product__Company__1920BF5C" FromRole="Product" ToRole="Company" />
+    <NavigationProperty Name="InvoiceItems" Relationship="ShopModel.FK__InvoiceIt__Produ__2A4B4B5E" FromRole="Product" ToRole="InvoiceItem" />
+    <NavigationProperty Name="Prices" Relationship="ShopModel.FK__Price__ProductID__37A5467C" FromRole="Product" ToRole="Price" />
+  </EntityType>
+  <Association Name="FK__Product__Company__1920BF5C">
+    <End Role="Company" Type="ShopModel.Company" Multiplicity="1" />
+    <End Role="Product" Type="ShopModel.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Invoice__Custome__20C1E124">
+    <End Role="Customer" Type="ShopModel.Customer" Multiplicity="1" />
+    <End Role="Invoice" Type="ShopModel.Invoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Invoice">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Payment__Custome__24927208">
+    <End Role="Customer" Type="ShopModel.Customer" Multiplicity="1" />
+    <End Role="Payment" Type="ShopModel.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__InvoiceIt__Invoi__29572725">
+    <End Role="Invoice" Type="ShopModel.Invoice" Multiplicity="1" />
+    <End Role="InvoiceItem" Type="ShopModel.InvoiceItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Invoice">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="InvoiceItem">
+        <PropertyRef Name="InvoiceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__InvoiceIt__Produ__2A4B4B5E">
+    <End Role="Product" Type="ShopModel.Product" Multiplicity="1" />
+    <End Role="InvoiceItem" Type="ShopModel.InvoiceItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="InvoiceItem">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Payment__PayType__25869641">
+    <End Role="PayType" Type="ShopModel.PayType" Multiplicity="1" />
+    <End Role="Payment" Type="ShopModel.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PayType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="PayTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Price__ProductID__37A5467C">
+    <End Role="Product" Type="ShopModel.Product" Multiplicity="1" />
+    <End Role="Price" Type="ShopModel.Price" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Price">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ProductView">
+    <Key>
+      <PropertyRef Name="Company" />
+      <PropertyRef Name="Code" />
+      <PropertyRef Name="Product" />
+      <PropertyRef Name="Price" />
+    </Key>
+    <Property Type="String" Name="Company" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Code" Nullable="false" MaxLength="5" FixedLength="true" Unicode="false" />
+    <Property Type="String" Name="Product" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="Price" Nullable="false" />
+  </EntityType>
+</Schema>

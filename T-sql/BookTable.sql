@@ -1,0 +1,51 @@
+USE [Publishers]
+GO
+
+/****** Object:  Table [dbo].[Book]    Script Date: 3/12/2013 2:14:05 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Book](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[PublisherID] [bigint] NOT NULL,
+	[Title] [nvarchar](200) NOT NULL,
+	[PrintYear] [smallint] NOT NULL,
+	[Pages] [smallint] NOT NULL,
+	[ISBN] [char](10) NOT NULL,
+	[TimeStamp] [timestamp] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[ISBN] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Book]  WITH CHECK ADD FOREIGN KEY([PublisherID])
+REFERENCES [dbo].[Publisher] ([ID])
+GO
+
+ALTER TABLE [dbo].[Book]  WITH CHECK ADD FOREIGN KEY([PublisherID])
+REFERENCES [dbo].[Publisher] ([ID])
+GO
+
+ALTER TABLE [dbo].[Book]  WITH CHECK ADD  CONSTRAINT [CK_Book] CHECK  (([Pages]>=(10) AND [ISBN] like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'))
+GO
+
+ALTER TABLE [dbo].[Book] CHECK CONSTRAINT [CK_Book]
+GO
+
+
